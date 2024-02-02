@@ -4,59 +4,66 @@ import { tokens } from "../../theme";
 import { mockDataContacts } from "../../data/mockData";
 import Header from "../../components/Header";
 import { useTheme } from "@mui/material";
-
+import { useState,useEffect } from "react"
 const Contacts = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const [updates,setUpdates] = useState([]);
+  const [newUpdates,setNewUpdates] = useState([]);
+   useEffect(() => {
+ 
+    const authToken = '0363d4c937bd2e7c7685bf62567fba601eea82d8dad4b13bb443175c1ce7ef343e157963dbb0a1622c35622632e8ce8013717f3b7c12b250c3c699dc26228a70c450d3f7703b161e1c63df37f92fd0bc4d9b2566bcf9fdf8127105b2efda85b0359cae361815ca6ac7dcc8c476dc4aaf672c129ae93794bd4f3db862b37e32f9';
+    const updatesApiUrl = 'https://bookseva-backend-7w338.ondigitalocean.app/api/updates?populate=*';
+    const fetchData = async () => {
+      try {
+        const response = await fetch(updatesApiUrl, {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+            'Content-Type': 'application/json',
+          },
+        });
 
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log('Data:', data);
+        const newUpdatesData = data.data.map(item => ({
+          id: item.id,
+          createdAt: item.attributes.createdAt,
+          title: item.attributes.title,
+          description: item.attributes.description,
+        }));
+
+        console.log('newUpdates', newUpdatesData);
+
+        // Set the newUpdates state
+        setNewUpdates(newUpdatesData);
+         console.log('newupdates', newUpdates);
+        setUpdates(data);
+        // Handle the fetched data as needed
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        // Handle errors
+      }
+    };
+
+    fetchData();
+  }, [])
   const columns = [
     { field: "id", headerName: "ID", flex: 0.5 },
-    { field: "registrarId", headerName: "Registrar ID" },
-    {
-      field: "name",
-      headerName: "Name",
-      flex: 1,
-      cellClassName: "name-column--cell",
-    },
-    {
-      field: "age",
-      headerName: "Age",
-      type: "number",
-      headerAlign: "left",
-      align: "left",
-    },
-    {
-      field: "phone",
-      headerName: "Phone Number",
-      flex: 1,
-    },
-    {
-      field: "email",
-      headerName: "Email",
-      flex: 1,
-    },
-    {
-      field: "address",
-      headerName: "Address",
-      flex: 1,
-    },
-    {
-      field: "city",
-      headerName: "City",
-      flex: 1,
-    },
-    {
-      field: "zipCode",
-      headerName: "Zip Code",
-      flex: 1,
-    },
+    { field: "createdAt", headerName: "Created At", flex: 1 },
+    { field: "title", headerName: "Title", flex: 1 },
+    { field: "description", headerName: "Description", flex: 1 },
   ];
+
 
   return (
     <Box m="20px">
       <Header
-        title="CONTACTS"
-        subtitle="List of Contacts for Future Reference"
+        title="Updates"
+        subtitle="List of all Temple Updates"
       />
       <Box
         m="40px 0 0 0"
@@ -91,7 +98,7 @@ const Contacts = () => {
         }}
       >
         <DataGrid
-          rows={mockDataContacts}
+          rows={newUpdates}
           columns={columns}
           components={{ Toolbar: GridToolbar }}
         />

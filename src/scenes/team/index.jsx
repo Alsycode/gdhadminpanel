@@ -6,28 +6,71 @@ import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettin
 import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
 import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
 import Header from "../../components/Header";
+import { useEffect,useState } from "react";
 
 const Team = () => {
+  const authToken = '0363d4c937bd2e7c7685bf62567fba601eea82d8dad4b13bb443175c1ce7ef343e157963dbb0a1622c35622632e8ce8013717f3b7c12b250c3c699dc26228a70c450d3f7703b161e1c63df37f92fd0bc4d9b2566bcf9fdf8127105b2efda85b0359cae361815ca6ac7dcc8c476dc4aaf672c129ae93794bd4f3db862b37e32f9';
+const templeApiUrl = 'https://bookseva-backend-7w338.ondigitalocean.app/api/temple-lists?populate=*';
+
+const [teamData,setTeamData] = useState([])
+const [newData,setNewData] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(templeApiUrl, {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log('Data:', data);
+        const templeData = data.data.map(item => ({
+          nameinenglish: item.attributes.nameinenglish,
+          nameinmalayalam: item.attributes.nameinmalayalam,
+          district: item.attributes.district,
+          email: item.attributes.email,
+          id:item.id
+        }));
+  setNewData(templeData);
+        console.log('Temple Data:', templeData);
+        setTeamData(data);
+        // Handle the fetched data as needed
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        // Handle errors
+      }
+    };
+
+    fetchData();
+  }, [])
+  console.log("teamData",teamData)
+  console.log("newData",newData)
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const columns = [
     { field: "id", headerName: "ID" },
     {
-      field: "name",
-      headerName: "Name",
+      field: "nameinenglish",
+      headerName: "English Name",
       flex: 1,
       cellClassName: "name-column--cell",
     },
     {
-      field: "age",
-      headerName: "Age",
-      type: "number",
+      field: "nameinmalayalam",
+      headerName: "Malayalam Name",
+      flex: 1,
       headerAlign: "left",
       align: "left",
     },
     {
-      field: "phone",
-      headerName: "Phone Number",
+      field: "district",
+      headerName: "District",
       flex: 1,
     },
     {
@@ -35,42 +78,11 @@ const Team = () => {
       headerName: "Email",
       flex: 1,
     },
-    {
-      field: "accessLevel",
-      headerName: "Access Level",
-      flex: 1,
-      renderCell: ({ row: { access } }) => {
-        return (
-          <Box
-            width="60%"
-            m="0 auto"
-            p="5px"
-            display="flex"
-            justifyContent="center"
-            backgroundColor={
-              access === "admin"
-                ? colors.greenAccent[600]
-                : access === "manager"
-                ? colors.greenAccent[700]
-                : colors.greenAccent[700]
-            }
-            borderRadius="4px"
-          >
-            {access === "admin" && <AdminPanelSettingsOutlinedIcon />}
-            {access === "manager" && <SecurityOutlinedIcon />}
-            {access === "user" && <LockOpenOutlinedIcon />}
-            <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>
-              {access}
-            </Typography>
-          </Box>
-        );
-      },
-    },
   ];
 
   return (
     <Box m="20px">
-      <Header title="TEAM" subtitle="Managing the Team Members" />
+      <Header title="Temple List" subtitle="Manage temples in the database" />
       <Box
         m="40px 0 0 0"
         height="75vh"
@@ -100,7 +112,8 @@ const Team = () => {
           },
         }}
       >
-        <DataGrid checkboxSelection rows={mockDataTeam} columns={columns} />
+        {/* Pass the fetched temple data (newData) to the DataGrid component */}
+        <DataGrid checkboxSelection rows={newData} columns={columns} />
       </Box>
     </Box>
   );
