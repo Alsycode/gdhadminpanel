@@ -7,50 +7,51 @@ import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
 import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
 import Header from "../../components/Header";
 import { useEffect,useState } from "react";
-
+import Button from "@mui/material/Button";
+import { useTempleData } from "../../components/context";
 const Team = () => {
   const authToken = '0363d4c937bd2e7c7685bf62567fba601eea82d8dad4b13bb443175c1ce7ef343e157963dbb0a1622c35622632e8ce8013717f3b7c12b250c3c699dc26228a70c450d3f7703b161e1c63df37f92fd0bc4d9b2566bcf9fdf8127105b2efda85b0359cae361815ca6ac7dcc8c476dc4aaf672c129ae93794bd4f3db862b37e32f9';
 const templeApiUrl = 'https://bookseva-backend-7w338.ondigitalocean.app/api/temple-lists?populate=*';
+const { newData,setNewData,templeData,setTempleData } = useTempleData();
 
-const [teamData,setTeamData] = useState([])
-const [newData,setNewData] = useState([]);
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(templeApiUrl, {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-            'Content-Type': 'application/json',
-          },
-        });
 
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await fetch(templeApiUrl, {
+  //         headers: {
+  //           Authorization: `Bearer ${authToken}`,
+  //           'Content-Type': 'application/json',
+  //         },
+  //       });
 
-        const data = await response.json();
-        console.log('Data:', data);
-        const templeData = data.data.map(item => ({
-          nameinenglish: item.attributes.nameinenglish,
-          nameinmalayalam: item.attributes.nameinmalayalam,
-          district: item.attributes.district,
-          email: item.attributes.email,
-          id:item.id
-        }));
-  setNewData(templeData);
-        console.log('Temple Data:', templeData);
-        setTeamData(data);
-        // Handle the fetched data as needed
-      } catch (error) {
-        console.error('Error fetching data:', error);
-        // Handle errors
-      }
-    };
+  //       if (!response.ok) {
+  //         throw new Error(`HTTP error! Status: ${response.status}`);
+  //       }
 
-    fetchData();
-  }, [])
-  console.log("teamData",teamData)
-  console.log("newData",newData)
+  //       const data = await response.json();
+  //       console.log('Data:', data);
+  //       const templeData = data.data.map(item => ({
+  //         nameinenglish: item.attributes.nameinenglish,
+  //         nameinmalayalam: item.attributes.nameinmalayalam,
+  //         district: item.attributes.district,
+  //         email: item.attributes.email,
+  //         id:item.id
+  //       }));
+  // setNewData(templeData);
+  //       console.log('Temple Data:', templeData);
+  //       setTeamData(data);
+  //       // Handle the fetched data as needed
+  //     } catch (error) {
+  //       console.error('Error fetching data:', error);
+  //       // Handle errors
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, [])
+  console.log("teamData",templeData)
+  // console.log("newData",newData)
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const columns = [
@@ -83,6 +84,17 @@ const [newData,setNewData] = useState([]);
   return (
     <Box m="20px">
       <Header title="Temple List" subtitle="Manage temples in the database" />
+      <Box
+        display="flex"
+        justifyContent="flex-end"
+        mb="10px"
+      >
+  <a href="/form">
+        <Button variant="contained" color="primary" >
+          Add New Entry
+        </Button>
+        </a>
+      </Box>
       <Box
         m="40px 0 0 0"
         height="75vh"
