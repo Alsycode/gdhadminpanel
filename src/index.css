@@ -33,3 +33,17 @@ body,
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
+.login {
+  min-height: 100vh;
+  align-items: center;
+  background: linear-gradient(
+    90deg,
+    rgba(2, 0, 36, 1) 20%,
+    rgba(27, 146, 196, 1) 56%,
+    rgba(2, 0, 36, 1) 73%
+  );
+}
+
+.login h6 {
+  margin-top: 15px;
+}

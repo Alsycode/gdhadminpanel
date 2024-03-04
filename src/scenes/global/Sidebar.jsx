@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { ProSidebar, Menu, MenuItem } from "react-pro-sidebar";
 import { Box, IconButton, Typography, useTheme } from "@mui/material";
 import { Link } from "react-router-dom";
@@ -7,24 +7,32 @@ import { tokens } from "../../theme";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 import ContactsOutlinedIcon from "@mui/icons-material/ContactsOutlined";
-import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
-import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
-import PieChartOutlineOutlinedIcon from "@mui/icons-material/PieChartOutlineOutlined";
-import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
-
+import LogoutIcon from "@mui/icons-material/Logout"; 
+import { useAuth } from "../../context/AuthContext";
+import { logoutUser } from "../../helpers";
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const { logout } = useAuth(); // Access the logout function from the AuthContext
+  
   return (
     <MenuItem
       active={selected === title}
       style={{
         color: colors.grey[100],
+        background: "rgba(255, 255, 255, 0.1)",
+        backdropFilter: "blur(10px)",
+        border: "none",
+        borderRadius: "10px",
+        marginBottom: "10px",
+        padding: "10px",
+        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1), 0 6px 8px rgba(0, 0, 0, 0.15)",
+        marginRight: "20px", // Add margin to the right
       }}
       onClick={() => setSelected(title)}
       icon={icon}
@@ -40,12 +48,16 @@ const Sidebar = () => {
   const colors = tokens(theme.palette.mode);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [selected, setSelected] = useState("Dashboard");
-
+  const handleLogout = () => {
+    logoutUser();
+    // Additional logout logic, such as redirecting to the login page
+    window.location.reload(); // Reload the page after logout
+  }
   return (
     <Box
       sx={{
         "& .pro-sidebar-inner": {
-          background: `${colors.primary[400]} !important`,
+          background: '#9e4b06',
         },
         "& .pro-icon-wrapper": {
           backgroundColor: "transparent !important",
@@ -63,7 +75,6 @@ const Sidebar = () => {
     >
       <ProSidebar collapsed={isCollapsed}>
         <Menu iconShape="square">
-          {/* LOGO AND MENU ICON */}
           <MenuItem
             onClick={() => setIsCollapsed(!isCollapsed)}
             icon={isCollapsed ? <MenuOutlinedIcon /> : undefined}
@@ -94,23 +105,15 @@ const Sidebar = () => {
               <Box display="flex" justifyContent="center" alignItems="center">
                 <img
                   alt="profile-user"
-                  width="100px"
-                  height="100px"
+                  width="120px"
+                  height="40px"
                   src={`../../assets/gdhlogo.png`}
-                  style={{ cursor: "pointer", borderRadius: "50%" }}
+                  style={{ cursor: "pointer", borderRadius: "10%" }}
                 />
               </Box>
               <Box textAlign="center">
-                {/* <Typography
-                  variant="h2"
-                  color={colors.grey[100]}
-                  fontWeight="bold"
-                  sx={{ m: "10px 0 0 0" }}
-                >
-                  Ed Roh
-                </Typography> */}
                 <Typography variant="h5" color={colors.greenAccent[500]}>
-                Bussiness Growth Accelerated
+                  Bussiness Growth Accelerated
                 </Typography>
               </Box>
             </Box>
@@ -146,78 +149,30 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
-            {/* <Item
-              title="Invoices Balances"
-              to="/invoices"
-              icon={<ReceiptOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            /> */}
-
-        <Typography
-              variant="h6"
-              color={colors.grey[300]}
-              sx={{ m: "15px 0 5px 20px" }}
-            >
-              Pages
-            </Typography>
-            <Item
-              title="Profile Form"
+             {/* <Item
+              title="form"
               to="/form"
-              icon={<PersonOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            <Item
-              title="Calendar"
-              to="/calendar"
-              icon={<CalendarTodayOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            <Item
-              title="FAQ Page"
-              to="/faq"
-              icon={<HelpOutlineOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            /> 
-
-            {/* <Typography
-              variant="h6"
-              color={colors.grey[300]}
-              sx={{ m: "15px 0 5px 20px" }}
-            >
-              Charts
-            </Typography>
-            <Item
-              title="Bar Chart"
-              to="/bar"
-              icon={<BarChartOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            <Item
-              title="Pie Chart"
-              to="/pie"
-              icon={<PieChartOutlineOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            <Item
-              title="Line Chart"
-              to="/line"
-              icon={<TimelineOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            <Item
-              title="Geography Chart"
-              to="/geography"
-              icon={<MapOutlinedIcon />}
+              icon={<ContactsOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
             /> */}
+           <MenuItem
+            onClick={handleLogout}
+            icon={<LogoutIcon />}
+            style={{
+              color: colors.grey[100],
+              background: "rgba(255, 255, 255, 0.1)",
+              backdropFilter: "blur(10px)",
+              border: "none",
+              borderRadius: "10px",
+              marginBottom: "10px",
+              padding: "10px",
+              boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1), 0 6px 8px rgba(0, 0, 0, 0.15)",
+              marginRight: "20px", // Add margin to the right
+            }}
+          >
+            <Typography>Logout</Typography>
+          </MenuItem>
           </Box>
         </Menu>
       </ProSidebar>

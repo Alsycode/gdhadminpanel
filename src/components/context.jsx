@@ -7,8 +7,8 @@ const TempleDataContext = createContext();
 const TempleDataProvider = ({ children }) => {
   const [templeData, setTempleData] = useState([]);
   const [newData, setNewData] = useState([]);
-  const authToken = '0363d4c937bd2e7c7685bf62567fba601eea82d8dad4b13bb443175c1ce7ef343e157963dbb0a1622c35622632e8ce8013717f3b7c12b250c3c699dc26228a70c450d3f7703b161e1c63df37f92fd0bc4d9b2566bcf9fdf8127105b2efda85b0359cae361815ca6ac7dcc8c476dc4aaf672c129ae93794bd4f3db862b37e32f9';
-  const templeApiUrl = 'https://bookseva-backend-7w338.ondigitalocean.app/api/temple-lists?populate=*';
+  const authToken = '36d91d755f6933406f808c6bf39e61dfc5f91f83192d27953c1408254968d8370a23e758ffaa7a7aeefdebb91c21a8d6b7eb8dd771d427e6ee01f7e42e831681d35e263fc04f9209e5e02b6d5473a7899c896a983904eac92709ec1bb86fc2b726314bb0cebb7cfec92e46cd284328bf1a21e17736509a74b2ced35db5ef0265';
+  const templeApiUrl = 'http://localhost:1337/api/temple-lists?populate=*';
    const fetchData = async () => {
      try {
       const response = await fetch(templeApiUrl, {
