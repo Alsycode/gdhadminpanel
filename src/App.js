@@ -12,7 +12,7 @@ import Line from "./scenes/line";
 import Pie from "./scenes/pie";
 import FAQ from "./scenes/faq";
 import { AuthProvider, useAuth } from "./context/AuthContext";
-
+import Projects from"./scenes/projects";
 import Geography from "./scenes/geography";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { ColorModeContext, useMode } from "./theme";
@@ -21,7 +21,14 @@ import { TempleDataProvider } from "./components/context";
 import Update  from "./scenes/updateform"
 import Login from "./components/Loginpage/index"
 import { Protector ,userData} from "./helpers";
-
+import Testimony from "./scenes/testimony";
+import Blogs from "./scenes/blogs"
+import Blogform from "./scenes/blogforms"
+import ProjectForm from "./scenes/projectform";
+import Editblogs from "./scenes/editblogs"
+import EditProjects from "./scenes/projectedit"
+import TestimonyForm from "./scenes/testimonyform";
+import TestimonyEdit from "./scenes/testimonyedit";
 function App() {
   const user = userData();
   const { jwt } = user;
@@ -33,7 +40,7 @@ function App() {
    
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <div className="app" style={{background:'linear-gradient(135deg,#000000,#fb8b36)',}}>
+        <div className="app" style={{background:'linear-gradient(135deg,#780206,#061161)',}}>
         {user ? (
             <>
               <Sidebar isSidebar={isSidebar} />
@@ -56,7 +63,15 @@ function App() {
                     <Route path="/calendar" element={<Calendar />} />
                     <Route path="/geography" element={<Geography />} />
                     <Route path="/updateform" element={<Update />} />
-                   
+                   <Route path="/projects" element={<Projects/>}/>
+                   <Route path="/testimony" element={<Testimony/>}/>
+                   <Route path="/blogs" element={<Blogs/>}/>
+                   <Route path="/blogforms" element={<Blogform/>}/>
+                   <Route path="/projectform" element={<ProjectForm/>}/>
+                   <Route path="/editblogs/:slug" element={<Editblogs/>}/>
+                   <Route path="/projectedit/:slug" element={<EditProjects/>}/>
+                   <Route path="/testimonyform" element={<TestimonyForm/>}/>
+                   <Route path="/testimonyedit/:slug" element={<TestimonyEdit/>}/>
                   </Routes>
                 </TempleDataProvider>
               </main>

@@ -57,7 +57,7 @@ const Sidebar = () => {
     <Box
       sx={{
         "& .pro-sidebar-inner": {
-          background: '#9e4b06',
+          background: '#780206',
         },
         "& .pro-icon-wrapper": {
           backgroundColor: "transparent !important",
@@ -136,26 +136,33 @@ const Sidebar = () => {
               Data
             </Typography>
             <Item
-              title="Temple Entry"
-              to="/team"
+              title="Blogs"
+              to="/blogs"
               icon={<PeopleOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
             />
             <Item
-              title="Updates"
-              to="/contacts"
+              title="Project"
+              to="/projects"
               icon={<ContactsOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
             />
-             {/* <Item
-              title="form"
+              {/* <Item
+              title="Work"
               to="/form"
               icon={<ContactsOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
-            /> */}
+            />  */}
+                <Item
+              title="Testimony"
+              to="/testimony"
+              icon={<ContactsOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            /> 
            <MenuItem
             onClick={handleLogout}
             icon={<LogoutIcon />}

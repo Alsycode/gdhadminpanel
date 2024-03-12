@@ -5,48 +5,65 @@ import { createContext, useContext, useState, useEffect } from 'react';
 const TempleDataContext = createContext();
 
 const TempleDataProvider = ({ children }) => {
-  const [templeData, setTempleData] = useState([]);
-  const [newData, setNewData] = useState([]);
-  const authToken = '36d91d755f6933406f808c6bf39e61dfc5f91f83192d27953c1408254968d8370a23e758ffaa7a7aeefdebb91c21a8d6b7eb8dd771d427e6ee01f7e42e831681d35e263fc04f9209e5e02b6d5473a7899c896a983904eac92709ec1bb86fc2b726314bb0cebb7cfec92e46cd284328bf1a21e17736509a74b2ced35db5ef0265';
-  const templeApiUrl = 'http://localhost:1337/api/temple-lists?populate=*';
-   const fetchData = async () => {
-     try {
-      const response = await fetch(templeApiUrl, {
+  
+const [testimonyData,setTestimonyData] = useState([]);
+const [projectData,setProjectData] = useState([])
+const [blogData, setBlogData] = useState([]);
+ 
+  const fetchData = async () => {
+    const authToken = '36d91d755f6933406f808c6bf39e61dfc5f91f83192d27953c1408254968d8370a23e758ffaa7a7aeefdebb91c21a8d6b7eb8dd771d427e6ee01f7e42e831681d35e263fc04f9209e5e02b6d5473a7899c896a983904eac92709ec1bb86fc2b726314bb0cebb7cfec92e46cd284328bf1a21e17736509a74b2ced35db5ef0265';
+
+    // Update URLs
+    const worksApiUrl = 'http://localhost:1337/api/testimonies?populate=*';
+    const projectsApiUrl = 'http://localhost:1337/api/projects?populate=*';
+    const blogsApiUrl = 'http://localhost:1337/api/blogs?populate=*';
+    try {
+      const worksResponse = await fetch(worksApiUrl, {
         headers: {
           Authorization: `Bearer ${authToken}`,
           'Content-Type': 'application/json',
-         },
+        },
       });
 
-      if (!response.ok) {
-         throw new Error(`HTTP error! Status: ${response.status}`);
+      const projectsResponse = await fetch(projectsApiUrl, {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const blogsResponse = await fetch(blogsApiUrl, {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+          'Content-Type': 'application/json',
+        },
+      });
+      if (!worksResponse.ok || !projectsResponse.ok || !blogsResponse.ok) {
+        throw new Error(`HTTP error! Status: ${worksResponse.status}`);
       }
 
-       const data = await response.json();
-       setTempleData(data);
-       const templeDatas = data.data.map((item) => ({
-         nameinenglish: item.attributes.nameinenglish,
-        nameinmalayalam: item.attributes.nameinmalayalam,
-         district: item.attributes.district,
-        email: item.attributes.email,
-         id: item.id,
-       }));
-
-       setNewData(templeDatas);
-    //    setTempleData(data);
+      const testimonyData = await worksResponse.json();
+setTestimonyData(testimonyData);
+      const projectsData = await projectsResponse.json();
+setProjectData(projectsData)
+const blogsData = await blogsResponse.json();
+      setBlogData(blogsData);
       // Handle the fetched data as needed
-     } catch (error) {
-       console.error('Error fetching data:', error);
-       // Handle errors
-    }
-   };
+      console.log("Testimony Data:", testimonyData);
+      console.log("Projects Data:", projectsData);
 
-   useEffect(() => {
-     fetchData();
-   }, []);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      // Handle errors
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   return (
-    <TempleDataContext.Provider value={{ newData,setNewData,setTempleData,templeData}}>
+    <TempleDataContext.Provider value={{ projectData,setProjectData,testimonyData,setTestimonyData, blogData, setBlogData,fetchData }}>
       {children}
     </TempleDataContext.Provider>
   );
